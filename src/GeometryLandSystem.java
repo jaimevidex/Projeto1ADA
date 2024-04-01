@@ -41,6 +41,59 @@ public class GeometryLandSystem {
     }
 
     public long solve(String[] operatorsCropped, int[] vertices) {
+        /*
+        // Criação das matrizes que guardam os valores se formos fazer com os máximos
+        // e com os mínimos, tentativa de superar o resultado errado no exemplo 2
+        long[][] dpMax = new long[nrVertices][nrVertices];
+        long[][] dpMin = new long[nrVertices][nrVertices];
+
+        // Inicialização das matrizes
+        for (int i = 0; i < nrVertices; i++) {
+            for (int j = 0; j < nrVertices; j++) {
+                // com os valores do vertice se for a diagonal, porque é como se já so houvesse um vertice
+                if (i==j) {
+                    dpMax[i][i] = vertices[i];
+                    dpMin[i][i] = vertices[i];
+                }
+                // no resto da tabela colocar os MIN ou MAX Values, sugestão de gente no grupo do wpp dos gajos do nosso ano
+                // porque senão ia iniciar a 0 e isso pode dar asneira
+                else {
+                    dpMax[i][j] = Long.MAX_VALUE;
+                    dpMin[i][j] = Long.MIN_VALUE;
+                }
+            }
+        }
+
+        // indice das subsequencias
+        for (int l = 2; l <= nrVertices; l++) {
+            // corres os possivies indices iniciais (i)
+            for (int i = 0; i < nrVertices - l + 1; i++) {
+                int j = i + l - 1;
+
+                dpMax[i][j] = evaluate(dpMax[i][i], dpMax[i + 1][j], operatorsCropped[i]);
+
+                if (operatorsCropped[i].equals("+")) {
+                    dpMin[i][j] = Math.min(dpMin[i][i], dpMin[i + 1][j]);
+                } else {
+                    dpMin[i][j] = Math.max(dpMax[i][i], dpMax[i + 1][j]);
+                }
+
+                for (int k = i + 1; k < j; k++) {
+                    long leftValMax = evaluate(dpMax[i][k], dpMax[k + 1][j], operatorsCropped[k]);
+                    dpMax[i][j] = Math.max(dpMax[i][j], leftValMax);
+
+                    long leftValMin = evaluate(dpMin[i][k], dpMin[k + 1][j], operatorsCropped[k]);
+                    long rightValMin = evaluate(dpMin[i][k - 1], dpMin[k][j], operatorsCropped[k - 1]);
+                    if (operatorsCropped[k].equals("+")) {
+                        dpMin[i][j] = Math.min(dpMin[i][j], Math.min(leftValMin, rightValMin));
+                    } else {
+                        dpMin[i][j] = Math.max(dpMin[i][j], Math.max(leftValMin, rightValMin));
+                    }
+                }
+            }
+        }
+        return Math.max(dpMax[0][nrVertices - 1], dpMin[0][nrVertices - 1]);*/
+
         long[][] dp = new long[nrVertices][nrVertices];
         // Inicialização da matriz, preenchendo a diagonal com os casos base (só há um vertice)
         for (int i = 0; i < nrVertices; i++) {
@@ -67,6 +120,14 @@ public class GeometryLandSystem {
             }
         }
 
+        // Debug para ver as matrizes
+        /*
+        for (long[] longs : dp) {
+            System.out.println(Arrays.toString(longs));
+        }
+        System.out.println();
+        */
+
         return dp[0][nrVertices - 1];
     }
 
@@ -74,7 +135,7 @@ public class GeometryLandSystem {
         return switch (op) {
             case "+" -> a + b;
             case "*" -> (a * b);
-            default -> throw new IllegalArgumentException("Invalid operator: " + op);
+            default -> throw new IllegalStateException("Unexpected value: " + op);
         };
     }
 
