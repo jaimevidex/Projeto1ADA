@@ -41,7 +41,7 @@ public class GeometryLandSystem {
     }
 
     public long solve(String[] operatorsCropped, int[] vertices) {
-        /*
+
         // Criação das matrizes que guardam os valores se formos fazer com os máximos
         // e com os mínimos, tentativa de superar o resultado errado no exemplo 2
         long[][] dpMax = new long[nrVertices][nrVertices];
@@ -55,12 +55,6 @@ public class GeometryLandSystem {
                     dpMax[i][i] = vertices[i];
                     dpMin[i][i] = vertices[i];
                 }
-                // no resto da tabela colocar os MIN ou MAX Values, sugestão de gente no grupo do wpp dos gajos do nosso ano
-                // porque senão ia iniciar a 0 e isso pode dar asneira
-                else {
-                    dpMax[i][j] = Long.MAX_VALUE;
-                    dpMin[i][j] = Long.MIN_VALUE;
-                }
             }
         }
 
@@ -71,29 +65,39 @@ public class GeometryLandSystem {
                 int j = i + l - 1;
 
                 dpMax[i][j] = evaluate(dpMax[i][i], dpMax[i + 1][j], operatorsCropped[i]);
-
-                if (operatorsCropped[i].equals("+")) {
-                    dpMin[i][j] = Math.min(dpMin[i][i], dpMin[i + 1][j]);
-                } else {
-                    dpMin[i][j] = Math.max(dpMax[i][i], dpMax[i + 1][j]);
-                }
+                dpMin[i][j] = evaluate(dpMin[i][i], dpMin[i + 1][j], operatorsCropped[i]);
 
                 for (int k = i + 1; k < j; k++) {
-                    long leftValMax = evaluate(dpMax[i][k], dpMax[k + 1][j], operatorsCropped[k]);
-                    dpMax[i][j] = Math.max(dpMax[i][j], leftValMax);
+                    String op1 = operatorsCropped[k];
+                    String op2 = operatorsCropped[k - 1];
 
-                    long leftValMin = evaluate(dpMin[i][k], dpMin[k + 1][j], operatorsCropped[k]);
-                    long rightValMin = evaluate(dpMin[i][k - 1], dpMin[k][j], operatorsCropped[k - 1]);
-                    if (operatorsCropped[k].equals("+")) {
-                        dpMin[i][j] = Math.min(dpMin[i][j], Math.min(leftValMin, rightValMin));
-                    } else {
-                        dpMin[i][j] = Math.max(dpMin[i][j], Math.max(leftValMin, rightValMin));
-                    }
+                    long value1 = evaluate(dpMin[i][k], dpMin[k + 1][j], op1);
+                    long value2 = evaluate(dpMin[i][k - 1], dpMin[k][j], op2);
+                    long value3 = evaluate(dpMax[i][k], dpMax[k + 1][j], op1);
+                    long value4 = evaluate(dpMax[i][k - 1], dpMax[k][j], op2);
+                    long value5 = evaluate(dpMin[i][k], dpMax[k + 1][j], op1);
+                    long value6 = evaluate(dpMin[i][k - 1], dpMax[k][j], op2);
+                    long value7 = evaluate(dpMax[i][k], dpMin[k + 1][j], op1);
+                    long value8 = evaluate(dpMax[i][k - 1], dpMin[k][j], op2);
+
+                    dpMin[i][j] = Math.min(dpMin[i][j], Math.min(value1, Math.min(value2, Math.min(value3, Math.min(value4, Math.min(value5, Math.min(value6, Math.min(value7, value8))))))));
+                    dpMax[i][j] = Math.max(dpMax[i][j], Math.max(value1, Math.max(value2, Math.max(value3, Math.max(value4, Math.max(value5, Math.max(value6, Math.max(value7, value8))))))));
                 }
             }
         }
-        return Math.max(dpMax[0][nrVertices - 1], dpMin[0][nrVertices - 1]);*/
+        /*System.out.println("Maxes");
+        for (long[] longs : dpMax) {
+            System.out.println(Arrays.toString(longs));
+        }
+        System.out.println("Mins");
+        for (long[] longs : dpMin) {
+            System.out.println(Arrays.toString(longs));
+        }
+        System.out.println();*/
 
+        return Math.max(dpMax[0][nrVertices - 1], dpMin[0][nrVertices - 1]);
+
+        /*
         long[][] dp = new long[nrVertices][nrVertices];
         // Inicialização da matriz, preenchendo a diagonal com os casos base (só há um vertice)
         for (int i = 0; i < nrVertices; i++) {
@@ -121,14 +125,13 @@ public class GeometryLandSystem {
         }
 
         // Debug para ver as matrizes
-        /*
         for (long[] longs : dp) {
             System.out.println(Arrays.toString(longs));
         }
         System.out.println();
-        */
 
         return dp[0][nrVertices - 1];
+        */
     }
 
     public static long evaluate(long a, long b, String op) {
