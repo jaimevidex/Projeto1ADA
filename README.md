@@ -1,6 +1,6 @@
 # GeometryLand
 
-An algorithms exercise on circular sequences: a ring of integers joined by operators, where you must remove one operator and find the arrangement that maximises the value of the expression.
+An algorithms problem on circular sequences: a ring of integers joined by operators, where you must remove one operator and find the arrangement that maximises the value of the expression.
 
 
 ## The problem
