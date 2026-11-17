@@ -1,8 +1,7 @@
-# Projeto1ADA — GeometryLand
+# GeometryLand
 
 An algorithms exercise on circular sequences: a ring of integers joined by operators, where you must remove one operator and find the arrangement that maximises the value of the expression.
 
-Written in Java for the *Análise e Desenho de Algoritmos* course at Instituto Superior Técnico.
 
 ## The problem
 
@@ -50,4 +49,4 @@ The program reads from standard input, so pipe a file in or type the values dire
 |---|---|
 | `src/Main.java` | Parses input, calls the solver, prints results |
 | `src/GeometryLandSystem.java` | Rotation evaluation and maximum search |
-| `geometryland.pdf` | Original assignment statement |
+| `problem-statement.pdf` | Problem statement |
